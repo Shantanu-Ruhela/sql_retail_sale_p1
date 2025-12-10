@@ -1,6 +1,8 @@
-📊 SQL Retail Sales Analysis - Project README
-📌 Project Overview
-This project performs comprehensive retail sales analysis using SQL to explore customer purchasing patterns, sales performance, and business insights from a retail sales dataset. The analysis includes data cleaning, exploration, and answering key business questions.
+ SQL Retail Sales Analysis - Project README
+ Project Overview
+ This project performs comprehensive retail sales analysis using SQL to explore customer purchasing patterns, 
+ sales performance, and business insights from a retail sales dataset. The analysis includes data cleaning, 
+ exploration, and answering key business questions.
 
 🗃️ Dataset Information
 Table Name: retail_sales
@@ -34,7 +36,8 @@ quantiy	INT	Quantity purchased	Note: Spelled 'quantiy' in schema
 price_per_unit	FLOAT	Price per unit	Unit price of item
 cogs	FLOAT	Cost of goods sold	Cost incurred
 total_sale	FLOAT	Total sale amount	Revenue generated
-🧹 Data Cleaning Process
+
+ Data Cleaning Process
 The script includes data quality checks and cleaning:
 
 NULL Value Checks: Verified critical columns for completeness
@@ -215,6 +218,7 @@ SQLZoo Interactive Practice
 
 Advanced Topics
 Window Functions: Mode Analytics Guide
+
 
 
 
