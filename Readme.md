@@ -1,4 +1,5 @@
  SQL Retail Sales Analysis - Project README
+ 
  Project Overview
  This project performs comprehensive retail sales analysis using SQL to explore customer purchasing patterns, 
  sales performance, and business insights from a retail sales dataset. The analysis includes data cleaning, 
@@ -25,45 +26,44 @@ sql-retail-analysis/
 🛠️ Database Schema
 Table: retail_sale:
 Column	Data Type	Description	Notes
-transactions_id	INT	Primary key	Unique transaction identifier
-sale_date	DATE	Date of sale	Format: YYYY-MM-DD
-sale_time	TIME	Time of sale	Used for shift analysis
-customer_id	INT	Customer ID	Used for customer segmentation
-gender	VARCHAR(15)	Customer gender	'Male', 'Female', etc.
-age	INT	Customer age	Used for demographic analysis
-category	VARCHAR(20)	Product category	'Clothing', 'Beauty', etc.
-quantiy	INT	Quantity purchased	Note: Spelled 'quantiy' in schema
-price_per_unit	FLOAT	Price per unit	Unit price of item
-cogs	FLOAT	Cost of goods sold	Cost incurred
-total_sale	FLOAT	Total sale amount	Revenue generated
+
+create table retail_sales(
+transactions_id int primary key,
+sale_date date,
+sale_time time,
+customer_id int,
+gender varchar(15),
+age int,
+category varchar(20),
+quantiy int,
+price_per_unit float,
+cogs float,
+total_sale float
+);
 
  Data Cleaning Process
 The script includes data quality checks and cleaning:
-
 NULL Value Checks: Verified critical columns for completeness
 
 Data Removal: Deleted records with NULL values in essential fields:
-
-sale_date
-
-sale_time
-
-customer_id
-
-gender
+delete from retail_sales
+where sale_date is null
+or
+sale_time is null
+or
+customer_id is null
+or
+gender is null;
 
 Data Validation: Ensured data integrity before analysis
 
 📈 Business Questions & SQL Solutions
-Q.1: Daily Sales Extraction
-sql
--- Retrieve all sales on '2022-11-05'
-SELECT * FROM retail_sales WHERE sale_date = '2022-11-05';
-Purpose: Extract specific day's transactions for daily reporting.
 
-Q.2: Category & Quantity Filtering
-sql
--- Clothing transactions with quantity ≥4 in November 2022
+ Q.1 Write a SQL query to retrieve all columns for sales made on '2622-11-05
+     select * from retail_sales where sale_date = '2022-11-05';
+
+Q.2: Write a SQL query to retrieğe all transactions where the category is 'Clothing' and the quantity sold is more than 4 tis the month of Nov-2022
+
 SELECT * FROM retail_sales 
 WHERE category = 'Clothing' 
   AND sale_date >= '2022-11-01' 
@@ -71,9 +71,7 @@ WHERE category = 'Clothing'
   AND quantiy >= 4;
 Insight: Identifies bulk purchases in specific categories.
 
-Q.3: Category Performance Analysis
-sql
--- Total sales per category
+Q.3: Write a SQL query to calculate the total sales (total sale) for each category.
 SELECT category, 
        SUM(total_sale) AS Total_Sales, 
        COUNT(*) AS Total_Orders 
@@ -81,32 +79,26 @@ FROM retail_sales
 GROUP BY category;
 Output: Revenue and order count by product category.
 
-Q.4: Customer Demographic Analysis
-sql
--- Average age of Beauty category customers
+Q.4: Write a SQL query to find the average age of customers who purchased itens from the 'Beauty' category.
 SELECT ROUND(AVG(age)) AS avg_age 
 FROM retail_sales 
 WHERE category = 'Beauty';
 Insight: Target age group for beauty products.
 
-Q.5: High-Value Transactions
-sql
--- Transactions with total sale > 1000
+Q.5: Write a SQL query to find all transactions where the total sale is greater than 1000.
 SELECT * FROM retail_sales
 WHERE total_sale > 1000;
 Use Case: Identifying premium purchases.
 
-Q.6: Gender-based Category Analysis
-sql
--- Transaction count by gender per category
+Q.6: Write a SQL query to find the total number of transactions (transaction_id) made by each gender in each category.
+
 SELECT gender, category, COUNT(*) AS Total_number 
 FROM retail_sales 
 GROUP BY gender, category;
 Insight: Gender preferences across categories.
 
-Q.7: Monthly Sales Performance
-sql
--- Best selling month each year (using window function)
+Q.7: Write a SQL query to calculate the average sale for each month. Find out best selling month in each year
+-- window function
 SELECT * FROM (
   SELECT 
     YEAR(sale_date) AS Years,
@@ -120,9 +112,7 @@ SELECT * FROM (
 WHERE Ranks = 1;
 Advanced Feature: Window functions for ranking.
 
-Q.8: Top Customer Identification
-sql
--- Top 5 customers by total sales
+Q.8:  Write a SQL query to find the top 5 customers based on the highest total sales
 SELECT customer_id, SUM(total_sale) AS Total_Sales 
 FROM retail_sales 
 GROUP BY customer_id 
@@ -130,35 +120,32 @@ ORDER BY Total_Sales DESC
 LIMIT 5;
 Business Value: Identify VIP customers for loyalty programs.
 
-Q.9: Customer Reach per Category
-sql
--- Unique customers per category
+Q.9: Write a SQL query to find the number of unique customers who purchased items from each category.
 SELECT category, 
        COUNT(DISTINCT(customer_id)) AS cnt_unique_customer
 FROM retail_sales 
 GROUP BY category;
 Metric: Customer base diversity across categories.
 
-Q.10: Time-based Sales Distribution
-sql
--- Order distribution by time shifts using CTE
-WITH hourly_sale AS (
-  SELECT *,
-    CASE 
-      WHEN HOUR(sale_time) <= 12 THEN 'Morning'
-      WHEN HOUR(sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
-      ELSE 'Evening'
-    END AS shift
-  FROM retail_sales
-)
-SELECT shift, COUNT(*) AS total_orders 
-FROM hourly_sale
-GROUP BY shift;
-Technique: Common Table Expression (CTE) for readability.
-
+Q.10:  Write a SQL query to create each shift and number of orders (Example Morning <=12, 
+-- Afternoon Between 12 & 17, Evening >17)
+-- CTE method Common table expression
+with hourly_sale
+as
+(
+select *,
+case 
+when hour(sale_time) <= 12 then 'Morning'
+when hour(sale_time) between 12 and 17 then 'Aftenoon'
+else 'Evening'
+end as shift
+from retail_sales)
+select
+shift,
+count(*) as total_orders from hourly_sale
+group by shift;
 
 Step-by-Step Execution
-Create Database:
 
 sql
 CREATE DATABASE sql_project_p1;
@@ -218,6 +205,7 @@ SQLZoo Interactive Practice
 
 Advanced Topics
 Window Functions: Mode Analytics Guide
+
 
 
 
